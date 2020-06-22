@@ -1,15 +1,18 @@
 # CA - Epreuve du Feu
 
+## Intro
 Le langage choisi est **python**.
 
 Les épreuves sont résolues sans chercher à optimiser les scripts, l'objectif étant d'avoir une solution.
 
-##Tri
+Le dossier resources contient des fichiers utiles pour tester les scripts
+
+## Tri
 Je ne sais pas encore dire quel algorithme est implémenté.
-###Reste à faire
+### Reste à faire
 Découvrir et implémenter d'autres algorithmes
 
-##Sudoku
+## Sudoku
 La première version implémentée permet uniquement de résoudre des cas très très faciles : à chaque "tour" au moins 
 une case vide n'a qu'une solution
 
