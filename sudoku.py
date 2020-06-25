@@ -3,7 +3,7 @@ import sys
 if len(sys.argv) > 1:
     sudokuFile = sys.argv[1]
 else:
-    sudokuFile = "./resources/sudoku1.txt"
+    sudokuFile = "./resources/sudoku3.txt"
 
 file = open(sudokuFile)
 sudokuTable = file.read().splitlines()
@@ -170,9 +170,18 @@ def fill_sudoku_elimination_directe(sudoku):
                     sudoku[pos[0]][pos[1]] = 'X'
                     continue
             for pos in get_empty_cases(sudoku):
-                if '_' not in get_neighbour_numbers(pos, sudoku):
+                if '_' not in get_neighbour_numbers(pos, sudoku, False):
                     sudoku[pos[0]][pos[1]] = str(i)
                     case_filled = True
+                    break
+                elif '_' not in get_column_numbers(pos, sudoku, False):
+                    sudoku[pos[0]][pos[1]] = str(i)
+                    case_filled = True
+                    break
+                elif '_' not in get_row_numbers(pos, sudoku, False):
+                    sudoku[pos[0]][pos[1]] = str(i)
+                    case_filled = True
+                    break
             for j in range(9):
                 for k in range(9):
                     if sudoku[j][k] == 'X':
@@ -196,15 +205,22 @@ def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
 
 # write_sudoku_to_file(solve_sudoku(sudokuTable))
 
+
+
+
 print("Sudoku présenté :")
 for line in sudokuTable:
     print(''.join(line[0:3]), '|', ''.join(line[3:6]), '|', ''.join(line[6:9]))
 
 print("Sudoku rempli :")
 sudokuSolved = fill_sudoku_elimination_directe(sudokuTable)
-sudokuSolved = fill_solitaire_nu(sudokuSolved)
+# sudokuSolved = fill_solitaire_nu(sudokuSolved)
 
+i=0
 for line in sudokuSolved:
-    print(''.join(line[0:3]), '|', ''.join(line[3:6]), '|', ''.join(line[6:9]))
+    i += 1
+    print(''.join(line[0:3]) + '|' + ''.join(line[3:6]) + '|' + ''.join(line[6:9]))
+    if (i == 3) | (i == 6):
+        print('---+---+---')
 
 
