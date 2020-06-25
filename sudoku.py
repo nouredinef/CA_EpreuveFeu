@@ -143,18 +143,43 @@ def get_possible_numbers(position, sudoku):
     return numbers
 
 
-def solve_sudoku(sudoku):
+def fill_solitaire_nu(sudoku):
     empty_positions = get_empty_cases(sudoku)
-    while len(empty_positions) != 0:
-        empty_positions = get_empty_cases(sudoku)
-        for pos in empty_positions:
-            possible_sol = get_possible_numbers(pos, sudoku)
-            if len(possible_sol) == 1:
-                sudoku[pos[0]][pos[1]] = str(possible_sol[0])
-            else:
-
-                continue
+    for pos in empty_positions:
+        possible_sol = get_possible_numbers(pos, sudoku)
+        if len(possible_sol) == 1:
+            sudoku[pos[0]][pos[1]] = str(possible_sol[0])
+        else:
+            continue
     return sudoku
+
+
+def fill_sudoku_elimination_directe(sudoku):
+    case_filled = True
+    while case_filled:
+        case_filled = False
+        for i in range(1, 10):
+            for pos in get_empty_cases(sudoku):
+                if str(i) in get_row_numbers(pos, sudoku, False):
+                    sudoku[pos[0]][pos[1]] = 'X'
+                    continue
+                if str(i) in get_column_numbers(pos, sudoku, False):
+                    sudoku[pos[0]][pos[1]] = 'X'
+                    continue
+                if str(i) in get_neighbour_numbers(pos, sudoku, False):
+                    sudoku[pos[0]][pos[1]] = 'X'
+                    continue
+            for pos in get_empty_cases(sudoku):
+                if '_' not in get_neighbour_numbers(pos, sudoku):
+                    sudoku[pos[0]][pos[1]] = str(i)
+                    case_filled = True
+            for j in range(9):
+                for k in range(9):
+                    if sudoku[j][k] == 'X':
+                        sudoku[j][k] = '_'
+    return sudoku
+
+
 
 
 def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
@@ -171,5 +196,15 @@ def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
 
 # write_sudoku_to_file(solve_sudoku(sudokuTable))
 
+print("Sudoku présenté :")
+for line in sudokuTable:
+    print(''.join(line[0:3]), '|', ''.join(line[3:6]), '|', ''.join(line[6:9]))
 
-print(solve_sudoku(sudokuTable))
+print("Sudoku rempli :")
+sudokuSolved = fill_sudoku_elimination_directe(sudokuTable)
+sudokuSolved = fill_solitaire_nu(sudokuSolved)
+
+for line in sudokuSolved:
+    print(''.join(line[0:3]), '|', ''.join(line[3:6]), '|', ''.join(line[6:9]))
+
+

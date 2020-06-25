@@ -17,11 +17,14 @@ La première version implémentée permet uniquement de résoudre des cas très 
 une case vide n'a qu'une solution
 
 Mise à jour : Implémentation des "techniques simples" de résolution, cf (https://fr.wikibooks.org/wiki/R%C3%A9solution_de_casse-t%C3%AAtes/R%C3%A9solution_du_sudoku)
-La méthode implémentée est la recherche des valeurs uniques (ou "solitaire nu")
+
+Les méthode implémentée sont : 
+- la recherche des valeurs uniques (ou "solitaire nu")
+- L'élimination directe ("solitaire camouflé")
 
 
 
 ### Reste à faire
-A suivre :  Imlplémentation de l'élimination directe/indirecte 
+A suivre :  Imlplémentation de l'élimination indirecte 
 
 Si la motivation y est, implémentation des techniques avancées
