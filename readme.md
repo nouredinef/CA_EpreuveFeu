@@ -16,9 +16,12 @@ Découvrir et implémenter d'autres algorithmes
 La première version implémentée permet uniquement de résoudre des cas très très faciles : à chaque "tour" au moins 
 une case vide n'a qu'une solution
 
+Mise à jour : Implémentation des "techniques simples" de résolution, cf (https://fr.wikibooks.org/wiki/R%C3%A9solution_de_casse-t%C3%AAtes/R%C3%A9solution_du_sudoku)
+La méthode implémentée est la recherche des valeurs uniques (ou "solitaire nu")
+
+
+
 ### Reste à faire
-Ajouter dans un premier temps un cas légèrement évolué qui permettra de prendre en compte les possibilités
-des autres cases vides dans le voisinnage. Exemple : une case peu avoir 5, 7 ou 3 l'autre 5 ou 7. On sait que dans la 
-première il y aura forcément le chiffre 3.   
- 
- 
+A suivre :  Imlplémentation de l'élimination directe/indirecte 
+
+Si la motivation y est, implémentation des techniques avancées

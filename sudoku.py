@@ -171,32 +171,5 @@ def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
 
 # write_sudoku_to_file(solve_sudoku(sudokuTable))
 
-for line in sudokuTable:
-    print(''.join(line[0:3]), '|', ''.join(line[3:6]))
-
 
 print(solve_sudoku(sudokuTable))
-# Tests
-
-# print("Empty cases : ", get_empty_cases(sudokuTable))
-#
-# for pos in get_empty_cases(sudokuTable):
-#     print("---------------------------")
-#     print("Testing for position ", pos, ": ")
-#     print("Row numbers: ", get_row_numbers(pos, sudokuTable))
-#     print("Col numbers: ", get_column_numbers(pos, sudokuTable))
-#     print("Neighbour numbers: ", get_neighbour_numbers(pos, sudokuTable))
-#     print("Possible Numbers: ", get_possible_numbers(pos, sudokuTable))
-#     print("End...")
-
-# print("Rows numbers (0,7): ", get_row_numbers((0, 7), sudokuTable, True))
-# print("Column numbers (2,4): ", get_column_numbers((2, 4), sudokuTable, True))
-# print("Neighbor numbers (1,1): ", get_neighbour_numbers((1, 1), sudokuTable))
-# print("Neighbor numbers (3,0): ", get_neighbour_numbers((3, 0), sudokuTable))
-# print("Neighbor numbers (6,0): ", get_neighbour_numbers((6, 0), sudokuTable))
-# print("Neighbor numbers (0,3): ", get_neighbour_numbers((0, 3), sudokuTable))
-# print("Neighbor numbers (3,3): ", get_neighbour_numbers((3, 3), sudokuTable))
-# print("Neighbor numbers (6,3): ", get_neighbour_numbers((6, 3), sudokuTable))
-# print("Neighbor numbers (0,6): ", get_neighbour_numbers((0, 6), sudokuTable))
-# print("Neighbor numbers (3,6): ", get_neighbour_numbers((3, 6), sudokuTable))
-# print("Neighbor numbers (6,6): ", get_neighbour_numbers((6, 6), sudokuTable))
