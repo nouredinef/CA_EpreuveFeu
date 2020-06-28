@@ -40,8 +40,12 @@ def get_column_numbers(position, sudoku, keep_position=False):
         result.pop(position[0])
         return result
 
-def get_neighbour_numbers(position, sudoku, keep_position=False):
-    result = []
+
+def get_neighbour_numbers(position, sudoku, keep_position=False, result_as_map=False):
+    if result_as_map:
+        result = {}
+    else:
+        result = []
     row = position[0]
     col = position[1]
     if int(col / 3) == 0:
@@ -65,7 +69,10 @@ def get_neighbour_numbers(position, sudoku, keep_position=False):
             if (i == row) & (j == col) & (not keep_position):
                 continue
             else:
-                result.append(sudoku[i][j])
+                if result_as_map:
+                    result[(i, j)] = sudoku[i][j]
+                else:
+                    result.append(sudoku[i][j])
     return result
 
 
@@ -136,19 +143,59 @@ def fill_sudoku_elimination_indirecte(sudoku):
                               get_neighbour_numbers(pos, sudoku)):
                     sudoku[pos[0]][pos[1]] = 'X'
                     continue
+            empty_cases = get_empty_cases(sudoku)
+            empty_nei = True
+            # Vérifier les "carrés" avec des cases vides uniquement en ligne et en colonne ==> le chiffre doit y etre
+            while empty_nei:
+                empty_nei = False
+                empty_row = False
+                empty_col = False
+                visited_pos = []
+                for pos in empty_cases:
+                    if pos in visited_pos:
+                        continue
+                    empty_nei_pos = [pos]
+                    visited_pos.append(pos)
+                    neighbours = get_neighbour_numbers(pos, sudoku, False, True)
+                    for nei_pos in list(neighbours):
+                        if neighbours[nei_pos] != '_':
+                            continue
+                        visited_pos.extend(list(neighbours))
+                        if (nei_pos[0] == pos[0]) & (nei_pos[1] != pos[1]) & (not empty_col):
+                            empty_row = True
+                            empty_nei = True
+                            empty_nei_pos.append(nei_pos)
+                        elif (nei_pos[1] == pos[1]) & (nei_pos[0] != pos[0]) & (not empty_row):
+                            empty_col = True
+                            empty_nei = True
+                            empty_nei_pos.append(nei_pos)
+                        else:
+                            empty_col = False
+                            empty_row = False
+                            empty_nei = False
+                            break
+                    if empty_nei:
+                        changed_case = False
+                        if empty_row:
+                            for n in range(9):
+                                if (pos[0], n) in empty_nei_pos:
+                                    continue
+                                if sudoku[pos[0]][n] == '_':
+                                    sudoku[pos[0]][n] = 'X'
+                                    changed_case = True
+                        if empty_col:
+                            for n in range(9):
+                                if (n, pos[1]) in empty_nei_pos:
+                                    continue
+                                if sudoku[n][pos[1]] == '_':
+                                    sudoku[n][pos[1]] = 'X'
+                                    changed_case = True
+                        if not changed_case:
+                            empty_nei = False
             for pos in get_empty_cases(sudoku):
-                if '_' in get_neighbour_numbers(pos, sudoku):
-                    print("s")
-            for pos in get_empty_cases(sudoku):
-                if '_' not in get_neighbour_numbers(pos, sudoku):
-                    sudoku[pos[0]][pos[1]] = str(i)
-                    case_filled = True
-                    break
-                elif '_' not in get_column_numbers(pos, sudoku):
-                    sudoku[pos[0]][pos[1]] = str(i)
-                    case_filled = True
-                    break
-                elif '_' not in get_row_numbers(pos, sudoku):
+                if ('_' not in get_neighbour_numbers(pos, sudoku)) | \
+                        ('_' not in get_column_numbers(pos, sudoku)) | \
+                        ('_' not in get_row_numbers(pos, sudoku)):
                     sudoku[pos[0]][pos[1]] = str(i)
                     case_filled = True
                     break
@@ -179,10 +226,10 @@ for line in sudokuTable:
     print(''.join(line[0:3]), '|', ''.join(line[3:6]), '|', ''.join(line[6:9]))
 
 print("Sudoku rempli :")
-sudokuSolved = fill_sudoku_elimination_directe(sudokuTable)
+sudokuSolved = fill_sudoku_elimination_indirecte(sudokuTable)
 # sudokuSolved = fill_solitaire_nu(sudokuSolved)
 
-i=0
+i = 0
 for line in sudokuSolved:
     i += 1
     print(''.join(line[0:3]) + '|' + ''.join(line[3:6]) + '|' + ''.join(line[6:9]))
