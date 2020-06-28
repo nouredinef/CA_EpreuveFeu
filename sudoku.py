@@ -3,7 +3,7 @@ import sys
 if len(sys.argv) > 1:
     sudokuFile = sys.argv[1]
 else:
-    sudokuFile = "./resources/sudoku1.txt"
+    sudokuFile = "./resources/sudoku3.txt"
 
 file = open(sudokuFile)
 sudokuTable = file.read().splitlines()
@@ -218,6 +218,16 @@ def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
     solution_file.close()
 
 
+def validate_solution(sudoku):
+    for x in range(9):
+        for y in range(9):
+            pos = (x, y)
+            if sudoku[x][y] in (get_row_numbers(pos, sudoku) +
+                              get_column_numbers(pos, sudoku) +
+                              get_neighbour_numbers(pos, sudoku)):
+                return False
+    return True
+
 # write_sudoku_to_file(solve_sudoku(sudokuTable))
 
 
@@ -235,3 +245,6 @@ for line in sudokuSolved:
     print(''.join(line[0:3]) + '|' + ''.join(line[3:6]) + '|' + ''.join(line[6:9]))
     if (i == 3) | (i == 6):
         print('---+---+---')
+
+
+print('Is solution valid :', validate_solution(sudokuSolved))
