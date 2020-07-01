@@ -146,13 +146,11 @@ print("Sudoku présenté :")
 print_sudoku(sudokuTable)
 print('********************************')
 
-# sudokuSolved = fill_sudoku(sudokuTable)
-sudokuSolved = sudokuTable
+sudokuSolved = fill_sudoku(sudokuTable)
+
 print('********************************')
 print("Sudoku rempli :")
 print_sudoku(sudokuSolved)
-
-
 
 valid = validate_solution(sudokuSolved)
 if valid:
