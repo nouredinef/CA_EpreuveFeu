@@ -3,7 +3,7 @@ import sys
 if len(sys.argv) > 1:
     sudokuFile = sys.argv[1]
 else:
-    sudokuFile = "./resources/sudoku1.txt"
+    sudokuFile = "./resources/sudoku3.txt"
 
 file = open(sudokuFile)
 sudokuTable = file.read().splitlines()

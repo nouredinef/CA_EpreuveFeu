@@ -96,6 +96,79 @@ def fill_sudoku(original_sudoku):
     return sudoku
 
 
+def fill_sudoku_elimination_indirecte(sudoku):
+    case_filled = True
+    while case_filled:
+        case_filled = False
+        for i in range(1, 10):
+            for pos in get_empty_cases(sudoku):
+                if str(i) in (get_row_numbers(pos, sudoku) +
+                              get_column_numbers(pos, sudoku) +
+                              get_neighbour_numbers(pos, sudoku)):
+                    sudoku[pos[0]][pos[1]] = 'X'
+                    continue
+            empty_cases = get_empty_cases(sudoku)
+            empty_nei = True
+            while empty_nei:
+                empty_nei = False
+                empty_row = False
+                empty_col = False
+                visited_pos = []
+                for pos in empty_cases:
+                    if pos in visited_pos:
+                        continue
+                    empty_nei_pos = [pos]
+                    visited_pos.append(pos)
+                    neighbours = get_neighbour_numbers(pos, sudoku, False, True)
+                    for nei_pos in list(neighbours):
+                        if neighbours[nei_pos] != '_':
+                            continue
+                        visited_pos.extend(list(neighbours))
+                        if (nei_pos[0] == pos[0]) & (nei_pos[1] != pos[1]) & (not empty_col):
+                            empty_row = True
+                            empty_nei = True
+                            empty_nei_pos.append(nei_pos)
+                        elif (nei_pos[1] == pos[1]) & (nei_pos[0] != pos[0]) & (not empty_row):
+                            empty_col = True
+                            empty_nei = True
+                            empty_nei_pos.append(nei_pos)
+                        else:
+                            empty_col = False
+                            empty_row = False
+                            empty_nei = False
+                            break
+                    if empty_nei:
+                        changed_case = False
+                        if empty_row:
+                            for n in range(9):
+                                if (pos[0], n) in empty_nei_pos:
+                                    continue
+                                if sudoku[pos[0]][n] == '_':
+                                    sudoku[pos[0]][n] = 'X'
+                                    changed_case = True
+                        if empty_col:
+                            for n in range(9):
+                                if (n, pos[1]) in empty_nei_pos:
+                                    continue
+                                if sudoku[n][pos[1]] == '_':
+                                    sudoku[n][pos[1]] = 'X'
+                                    changed_case = True
+                        if not changed_case:
+                            empty_nei = False
+            for pos in get_empty_cases(sudoku):
+                if ('_' not in get_neighbour_numbers(pos, sudoku)) | \
+                        ('_' not in get_column_numbers(pos, sudoku)) | \
+                        ('_' not in get_row_numbers(pos, sudoku)):
+                    sudoku[pos[0]][pos[1]] = str(i)
+                    case_filled = True
+                    break
+            for j in range(9):
+                for k in range(9):
+                    if sudoku[j][k] == 'X':
+                        sudoku[j][k] = '_'
+    return sudoku
+
+
 def write_sudoku_to_file(sudoku, base_filename=sudokuFile):
     filename = base_filename + "_solution.txt"
     solution_file = open(filename, mode='w')
@@ -146,11 +219,25 @@ print("Sudoku présenté :")
 print_sudoku(sudokuTable)
 print('********************************')
 
-sudokuSolved = fill_sudoku(sudokuTable)
+sudokuSolved = fill_sudoku_elimination_indirecte(sudokuTable)
+
+valid = validate_solution(sudokuSolved)
+if valid:
+    write_sudoku_to_file(sudokuSolved)
+    print('The solution is valid and saved!')
+else:
+    sudokuSolved = fill_sudoku(sudokuSolved)
+    valid = validate_solution(sudokuSolved)
+    if valid:
+        write_sudoku_to_file(sudokuSolved)
+        print('The solution is valid and saved!')
+
 
 print('********************************')
 print("Sudoku rempli :")
 print_sudoku(sudokuSolved)
+
+
 
 valid = validate_solution(sudokuSolved)
 if valid:
